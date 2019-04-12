@@ -1,7 +1,5 @@
 package com.github.princesslana.smalld.examples
 
-import com.github.princesslana.smalld.SmallD
-
 val pingBot = bot {
   fun onMessageCreate(msg: Message) {
     when (msg.content) {

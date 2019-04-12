@@ -1,9 +1,12 @@
 package com.github.princesslana.smalld.examples
 
+import java.net.URL
+import com.github.princesslana.smalld.Attachment as JAttachment
 import com.github.princesslana.smalld.SmallD
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
+import okhttp3.MediaType
 
 
 data class GatewayPayload (
@@ -19,6 +22,10 @@ data class Message (
 }
 
 data class CreateMessage(val content: String)
+
+data class Attachment(val filename: String, val contentType: String, val url: URL) {
+  fun java() = JAttachment(filename, MediaType.parse(contentType), url)
+}
 
 
 typealias Bot = (SmallDGson) -> Unit
@@ -39,6 +46,10 @@ class SmallDGson(val smalld: SmallD) {
 
   fun post(path: String, payload: Any) {
     smalld.post(path, gson.toJson(payload))
+  }
+
+  fun post(path: String, attachment: Attachment) {
+    smalld.post(path, "abc", attachment.java())
   }
 }
 

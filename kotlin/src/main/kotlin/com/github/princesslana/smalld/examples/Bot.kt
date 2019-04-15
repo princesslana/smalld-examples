@@ -32,15 +32,19 @@ typealias Bot = (SmallDGson) -> Unit
 fun bot(bot: SmallDGson.() -> Unit): Bot = bot
 
 fun Bot.run(token: String) {
-  SmallD.run(token) { s -> this(SmallDGson(s)) }
+  SmallD.run(token) { this(SmallDGson(it)) }
 }
 
 class SmallDGson(val smalld: SmallD) {
   val gson = Gson()
 
+  fun include(vararg bs: Bot) {
+    bs.forEach { it(this) }
+  }
+
   fun onGatewayPayload(f: (GatewayPayload) -> Unit) {
-    smalld.onGatewayPayload { s ->
-      f(gson.fromJson(s, GatewayPayload::class.java))
+    smalld.onGatewayPayload {
+      f(gson.fromJson(it, GatewayPayload::class.java))
     }
   }
 

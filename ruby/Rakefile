@@ -1,0 +1,12 @@
+require 'jars/installer'
+
+task :install_jars do
+    Jars::Installer.vendor_jars!
+end
+
+namespace :run do
+    task :pingbot do
+        ruby 'lib/pingbot.rb'
+    end
+end
+

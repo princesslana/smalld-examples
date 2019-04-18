@@ -8,8 +8,16 @@ class Bot
   attr_accessor :smalld
   attr_reader :inits
 
-  def initialize
+  def initialize(&block)
     @inits = []
+
+    return unless block_given?
+
+    if block.arity == 1
+      yield self
+    else
+      instance_eval &block
+    end
   end
 
   def post(path, payload)
@@ -49,6 +57,3 @@ class Bot
   end
 end
 
-def bot
-  Bot.new.tap { |b| yield b if block_given? }
-end

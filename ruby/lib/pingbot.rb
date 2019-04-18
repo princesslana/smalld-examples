@@ -1,10 +1,8 @@
-
-
 require_relative 'bot'
 
-ping_bot = bot do |s|
-  s.on_message_create do |msg|
-    s.post "/channels/#{msg.channel_id}/messages", content: 'pong' if msg.content == '++ping'
+ping_bot = Bot.new do
+  on_message_create do |msg|
+    post "/channels/#{msg.channel_id}/messages", content: 'pong' if msg.content == '++ping'
   end
 end
 

@@ -6,5 +6,5 @@ ping_bot = Bot.new do
   end
 end
 
-ping_bot.run token: ENV['SMALLD_TOKEN']
+ping_bot.run token: ENV['SMALLD_TOKEN'] if __FILE__ == $0
 

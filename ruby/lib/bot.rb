@@ -1,8 +1,26 @@
 require_relative 'smalld-examples-ruby_jars'
+java_import com.github.princesslana.smalld.Attachment
 java_import com.github.princesslana.smalld.SmallD
+java_import java.net.URL
+java_import 'okhttp3.MediaType'
 
 require 'json'
 require 'hash_dot'
+require 'ostruct'
+
+class RAttachment
+  attr_reader :name, :mime_type, :url
+
+  def initialize(name, mime_type, url)
+    @name = name
+    @mime_type = mime_type
+    @url = url
+  end
+
+  def to_java
+    Attachment.new name, MediaType.parse(mime_type), URL.new(url)
+  end
+end
 
 class Bot
   attr_accessor :smalld
@@ -20,8 +38,8 @@ class Bot
     end
   end
 
-  def post(path, payload)
-    smalld.post path, payload.to_json
+  def post(path, payload, *attachments)
+    smalld.post path, payload.to_json, *attachments.map(&:to_java)
   end
 
   def method_missing(method_name, *args, &block)

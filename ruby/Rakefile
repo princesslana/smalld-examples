@@ -5,8 +5,10 @@ task :install_jars do
 end
 
 namespace :run do
-    task :pingbot do
-        ruby '-J-Dorg.slf4j.simpleLogger.defaultLogLevel=debug lib/pingbot.rb'
+    [:catbot, :pingbot].each do |bot|
+        task bot do
+            ruby "-J-Dorg.slf4j.simpleLogger.defaultLogLevel=debug lib/#{bot}.rb"
+        end
     end
 end
 

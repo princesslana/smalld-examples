@@ -24,10 +24,11 @@ end
 
 class Bot
   attr_accessor :smalld
-  attr_reader :inits
+  attr_reader :inits, :bots
 
   def initialize(&block)
     @inits = []
+    @bots = []
 
     return unless block_given?
 
@@ -36,6 +37,10 @@ class Bot
     else
       instance_eval &block
     end
+  end
+
+  def with(*bots)
+    self.bots.concat bots
   end
 
   def post(path, payload, *attachments)
@@ -65,8 +70,13 @@ class Bot
   end
 
   def run(opts = {})
-    self.smalld = SmallD.create opts[:token]
+    self.smalld = SmallD.create(opts[:token])
+
     inits.each { |i| i.call smalld }
+
+    bots.each { |b| b.smalld = smalld }
+    bots.map { |b| b.inits }.flatten.each { |i| i.call smalld }
+
     smalld.run
   rescue Exception => e
     puts e.message

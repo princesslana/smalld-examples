@@ -1,0 +1,12 @@
+require 'jars/installer'
+
+task :install_jars do
+    Jars::Installer.vendor_jars!
+end
+
+namespace :run do
+    task :pingbot do
+        ruby '-J-Dorg.slf4j.simpleLogger.defaultLogLevel=debug lib/pingbot.rb'
+    end
+end
+
